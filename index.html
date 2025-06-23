@@ -766,30 +766,35 @@
   })();
 </script>
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
   const form = document.querySelector('[data-form]');
   const submitBtn = document.querySelector('[data-form-btn]');
-
-  // Enable button when all inputs are filled
   const inputs = document.querySelectorAll('[data-form-input]');
+
+  // Input validation toggle
   inputs.forEach(input => {
     input.addEventListener('input', () => {
       const allFilled = [...inputs].every(input => input.value.trim() !== '');
-      submitBtn.disabled = !allFilled;
+      if (submitBtn) submitBtn.disabled = !allFilled;
     });
   });
 
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', function (e) {
     e.preventDefault();
+    console.log("Submitting form...");
 
-    emailjs.sendForm('service_bekaxuq', 'template_uvmhgev', this)
+    emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form)
       .then(() => {
-        alert('Message sent successfully!');
+        alert('Message sent!');
         form.reset();
-        submitBtn.disabled = true;
-      }, (error) => {
-        alert('Failed to send message. Please try again.\n' + JSON.stringify(error));
+        if (submitBtn) submitBtn.disabled = true;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('Failed to send message.');
       });
   });
+});
 </script>
   </body>
 </html>
