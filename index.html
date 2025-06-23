@@ -738,10 +738,12 @@
           <form action="#" class="form" data-form>
             <div class="input-wrapper">
               <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
+              <input type="text" name="phone" class="form-input" placeholder="Contact Number" required data-form-input>
+              <input type="text" name="reason" class="form-input" placeholder="Reason" required data-form-input>
               <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
             </div>
             <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
-            <button class="form-btn" type="submit" disabled data-form-btn>
+            <button class="form-btn" type="submit" data-form-btn>
               <ion-icon name="paper-plane"></ion-icon>
               <span>Send Message</span>
             </button>
@@ -757,5 +759,37 @@
     <!-- ionicon link -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript">
+  (function(){
+    emailjs.init("0a8Gbk93nzt4Zi59u"); // Replace with your EmailJS Public Key
+  })();
+</script>
+<script>
+  const form = document.querySelector('[data-form]');
+  const submitBtn = document.querySelector('[data-form-btn]');
+
+  // Enable button when all inputs are filled
+  const inputs = document.querySelectorAll('[data-form-input]');
+  inputs.forEach(input => {
+    input.addEventListener('input', () => {
+      const allFilled = [...inputs].every(input => input.value.trim() !== '');
+      submitBtn.disabled = !allFilled;
+    });
+  });
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    emailjs.sendForm('service_bekaxuq', 'template_uvmhgev', this)
+      .then(() => {
+        alert('Message sent successfully!');
+        form.reset();
+        submitBtn.disabled = true;
+      }, (error) => {
+        alert('Failed to send message. Please try again.\n' + JSON.stringify(error));
+      });
+  });
+</script>
   </body>
 </html>
